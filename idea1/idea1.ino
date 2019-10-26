@@ -34,6 +34,7 @@ void setup() {
 
   lcd.begin(16, 2);
   lcd.setRGB(red, green, blue);
+  
   lcd.print("test pogU");
   delay(1000);
 }
