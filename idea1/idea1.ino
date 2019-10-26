@@ -3,11 +3,10 @@
 #include "rgb_lcd.h"
 
 const int potentiometer = A0; //assigns potentiometer to pin A0
-const int FULL_ANGLE = 300; //signifies the angle that the potentiometer can reach max
-const int ADC_REF = 5; //voltage
-const int GROVE_VCC = 5; //ground
-const int button = 8; //assigns button to pin 7
-const int buzzer = 4; //assigns buzzer to pin 3
+const int angle = 300; //signifies the angle that the potentiometer can reach max
+const int button = 8; //assigns button to pin 8
+const int buzzer = 4; //assigns buzzer to pin 4
+const int led = 3; //assigns led to pin 3
 
 //screen rgb
 rgb_lcd lcd;
@@ -31,6 +30,7 @@ void setup() {
   pinMode(potentiometer, INPUT);
   pinMode(button, INPUT);
   pinMode(buzzer, OUTPUT);
+  pinMode(led, OUTPUT);
 
   //initiates lcd screen
   lcd.begin(16, 2); //initialize 16x2 screen
@@ -39,16 +39,29 @@ void setup() {
   delay(1000); //1 second delay until ON
 }
 
+void cFade (unsigned char color){
+  for (int i = 0; i < 255; i++){
+    lcd.setPWM(color, i);
+    delay(10);
+    }
+    delay(100);
+  }
+
 void loop() {
   
-  lcd.setCursor(0,1);
-  lcd.print(notePitch); //changeable lcd value
+  lcd.setCursor(0,1);//changes the place to print
+  lcd.print(millis()/1000); //changeable lcd value
+
+  int sensorValue = analogRead(A0); //puts the value of potent onto varaible sensorValue 
+  int pitch = sensorValue/49; //pitch is sensorValue divided by 49 to get 6 pitches?
   
-  int sensorValue = analogRead(A0);
-  int pitch = sensorValue/49;
-  delay(100);
-  
-  int btn = digitalRead(button);
-  digitalWrite(buzzer, btn);
+  int btn = digitalRead(button); //reads button input and puts it into variable btn
+  digitalWrite(buzzer, btn); //when the button is pressed, buzzer goes off
+  digitalWrite(led, btn); //when button is pressed, led turns on
   delay(10);
+
+  cFade(REG_RED);
+  cFade(REG_GREEN);
+  cFade(REG_BLUE);
+  
 }
