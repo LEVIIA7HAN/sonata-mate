@@ -42,7 +42,7 @@ void setup() {
 void cFade (unsigned char color){
   for (int i = 0; i < 255; i++){
     lcd.setPWM(color, i);
-    delay(10);
+    delay(25);
     }
     delay(100);
   }
