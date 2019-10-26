@@ -10,9 +10,7 @@ const int led = 3; //assigns led to pin 3
 
 //screen rgb
 rgb_lcd lcd;
-const int red = 255;
-const int green = 0;
-const int blue = 255;
+
 
 //notes array
 int notes[] = {
@@ -34,34 +32,38 @@ void setup() {
 
   //initiates lcd screen
   lcd.begin(16, 2); //initialize 16x2 screen
-  lcd.setRGB(red, green, blue); //initialize rgb
-  lcd.print("test pogU"); //prints on first line
+  lcd.print("pepejam"); //prints on first line
   delay(1000); //1 second delay until ON
 }
-
-void cFade (unsigned char color){
-  for (int i = 0; i < 255; i++){
-    lcd.setPWM(color, i);
-    delay(25);
-    }
-    delay(100);
-  }
-
-void loop() {
-  
-  lcd.setCursor(0,1);//changes the place to print
-  lcd.print(millis()/1000); //changeable lcd value
-
-  int sensorValue = analogRead(A0); //puts the value of potent onto varaible sensorValue 
-  int pitch = sensorValue/49; //pitch is sensorValue divided by 49 to get 6 pitches?
-  
+void ignitionButt(){
   int btn = digitalRead(button); //reads button input and puts it into variable btn
   digitalWrite(buzzer, btn); //when the button is pressed, buzzer goes off
   digitalWrite(led, btn); //when button is pressed, led turns on
   delay(10);
+  }
 
-  cFade(REG_RED);
-  cFade(REG_GREEN);
-  cFade(REG_BLUE);
+void changePitch(){
+  int sensorValue = analogRead(A0); //puts the value of potent onto varaible sensorValue 
+  int pitch = sensorValue/49; //pitch is sensorValue divided by 49 to get 6 pitches?
+  }
+
+void firstDisplay(){
+  lcd.setCursor(0,1);//changes the place to print
+  lcd.print(millis()/1000); //changeable lcd value
+  }
+
+void strobe(unsigned char color){
+  for (int i = 0; i < 255; i++){
+    lcd.setPWM(color, i);
+    }
+  }
+
+void loop() {
+  ignitionButt();
+  changePitch();
+  firstDisplay();
+  strobe(REG_RED);
+  strobe(REG_GREEN);
+  strobe(REG_BLUE);
   
 }
