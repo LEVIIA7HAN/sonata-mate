@@ -11,6 +11,17 @@ const int led = 3; //assigns led to pin 3
 //screen rgb
 rgb_lcd lcd;
 
+//music note pixel art
+byte musicNote[8] = {
+    0b00001,
+    0b00001,
+    0b00001,
+    0b00001,
+    0b00001,
+    0b01111,
+    0b11111,
+    0b01110
+};
 
 //notes array
 int notes[] = {
@@ -25,6 +36,7 @@ int speakerPine = 2;
 
 //assigns input/output values to components
 void setup() {
+  //assigns modes to pins
   pinMode(potentiometer, INPUT);
   pinMode(button, INPUT);
   pinMode(buzzer, OUTPUT);
@@ -32,14 +44,20 @@ void setup() {
 
   //initiates lcd screen
   lcd.begin(16, 2); //initialize 16x2 screen
-  lcd.print("pepejam"); //prints on first line
-  delay(1000); //1 second delay until ON
+  lcd.print("<3"); //prints on first line
+
+  #if 1
+  lcd.createChar(0, musicNote);
+  #endif
+  lcd.setCursor(7,0);
+  lcd.write((unsigned char)0);
 }
+
 void ignitionButt(){
   int btn = digitalRead(button); //reads button input and puts it into variable btn
   digitalWrite(buzzer, btn); //when the button is pressed, buzzer goes off
   digitalWrite(led, btn); //when button is pressed, led turns on
-  delay(10);
+  delay(1);
   }
 
 void changePitch(){
