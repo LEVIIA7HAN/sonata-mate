@@ -6,8 +6,8 @@ const int potentiometer = A0; //assigns potentiometer to pin A0
 const int FULL_ANGLE = 300; //signifies the angle that the potentiometer can reach max
 const int ADC_REF = 5; //voltage
 const int GROVE_VCC = 5; //ground
-const int button = 7; //assigns button to pin 7
-const int buzzer = 3; //assigns buzzer to pin 3
+const int button = 8; //assigns button to pin 7
+const int buzzer = 4; //assigns buzzer to pin 3
 
 //screen rgb
 rgb_lcd lcd;
@@ -32,16 +32,17 @@ void setup() {
   pinMode(button, INPUT);
   pinMode(buzzer, OUTPUT);
 
-  lcd.begin(16, 2);
-  lcd.setRGB(red, green, blue);
-  
-  lcd.print("test pogU");
-  delay(1000);
+  //initiates lcd screen
+  lcd.begin(16, 2); //initialize 16x2 screen
+  lcd.setRGB(red, green, blue); //initialize rgb
+  lcd.print("test pogU"); //prints on first line
+  delay(1000); //1 second delay until ON
 }
 
 void loop() {
+  
   lcd.setCursor(0,1);
-  lcd.print(millis()/1000);
+  lcd.print(notePitch); //changeable lcd value
   
   int sensorValue = analogRead(A0);
   int pitch = sensorValue/49;
