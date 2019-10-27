@@ -12,6 +12,12 @@ const int led = 3; //assigns led to pin 3
 const int firstNote = 0;
 const int lastNote = 7;
 
+const int firstOctave = 0;
+const int lastOctave = 3;
+
+const int minVolume = 0;
+const int maxVolume = 100;
+
 int pitchVal = 0; //variable to store value of pitch
 int pitchPoten = 0; //variable to store value of potentiometer
 
@@ -65,32 +71,15 @@ void setup() {
   lcd.write((unsigned char)0);
 }
 
-void ignitionButt() {
-  int btn = digitalRead(button); //reads button input and puts it into variable btn
-  digitalWrite(buzzer, btn); //when the button is pressed, buzzer goes off
-  digitalWrite(led, btn); //when button is pressed, led turns on
-  delay(1);
-}
-
-/*void firstDisplay() {
-  lcd.setCursor(0, 1); //changes the place to print
-  lcd.print(millis() / 1000); //changeable lcd value
-  }*/
-
-void porygon(unsigned char color) {
-  for (int i = 0; i < 255; i++) {
-    lcd.setPWM(color, i);
-  }
-}
-
 void changePitch() {
   pitchPoten = analogRead(pitchKnob); //reads the analogIn value
   pitchVal = map(pitchPoten, 0, 1023, firstNote, lastNote); //maps the ranges
-  
+
   //test write
   Serial.print("sensor");
   Serial.println(pitchVal);
-  /*
+
+  //Entire if statement changes the note/pitch
   if (pitchVal == 0 || pitchVal <= 1) {
     Serial.print("sensor = ");
     Serial.print(pitchVal);
@@ -141,13 +130,11 @@ void changePitch() {
     lcd.setCursor(0, 0); //changes the place to print
     lcd.print("Note: B"); //prints on first line
   };
-  */
 }
 
 void changeVolume() {
   volumePoten = analogRead(volumeKnob); //reads the analogIn value
   volumeVal = map(volumePoten, 0, 1023, 0, 100); //maps the ranges
-  analogWrite(volumeKnob, volumeVal / 10.23); //results in 0-100 for volume
 
   Serial.print("Volume: ");
   Serial.println(volumeVal);
@@ -156,10 +143,27 @@ void changeVolume() {
 void changeOctave() {
   octavePoten = analogRead(octaveKnob); //reads the analogIn value
   octaveVal = map(octavePoten, 0, 1023, 0, 3); //maps the ranges
-  analogWrite(octaveKnob, octaveVal / 100); //results in a 0-3 for octave change
 
   Serial.print("Octave: ");
   Serial.println(octaveVal);
+}
+
+void ignitionButt() {
+  int btn = digitalRead(button); //reads button input and puts it into variable btn
+  digitalWrite(buzzer, btn); //when the button is pressed, buzzer goes off
+  digitalWrite(led, btn); //when button is pressed, led turns on
+  delay(1);
+}
+
+/*void firstDisplay() {
+  lcd.setCursor(0, 1); //changes the place to print
+  lcd.print(millis() / 1000); //changeable lcd value
+  }*/
+
+void porygon(unsigned char color) {
+  for (int i = 0; i < 255; i++) {
+    lcd.setPWM(color, i);
+  }
 }
 
 void loop() {
