@@ -12,7 +12,7 @@ const int led = 3; //assigns led to pin 3
 const int firstNote = 0;
 const int lastNote = 7;
 
-const int firstOctave = 0;
+const int firstOctave = 1;
 const int lastOctave = 3;
 
 const int minVolume = 0;
@@ -42,10 +42,16 @@ byte musicNote[8] = {
   0b01110
 };
 
-int notes[] = {
-  NOTE_C3, NOTE_D3, NOTE_E3, NOTE_F3, NOTE_G3, NOTE_A3, NOTE_B3,
-  NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_A4, NOTE_B4,
+int bottomC[] = {
   NOTE_C5, NOTE_D5, NOTE_E5, NOTE_F5, NOTE_G5, NOTE_A5, NOTE_B5
+};
+
+int middleC[] = {
+  NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_A4, NOTE_B4,
+};
+
+int topC[] = {
+  NOTE_C3, NOTE_D3, NOTE_E3, NOTE_F3, NOTE_G3, NOTE_A3, NOTE_B3
 };
 
 //assigns input/output values to components
@@ -75,56 +81,44 @@ void changePitch() {
   pitchPoten = analogRead(pitchKnob); //reads the analogIn value
   pitchVal = map(pitchPoten, 0, 1023, firstNote, lastNote); //maps the ranges
 
-  //test write
-  Serial.print("sensor");
-  Serial.println(pitchVal);
+  /*
+    //test write
+    Serial.print("sensor");
+    Serial.println(pitchVal);
+  */
 
   //Entire if statement changes the note/pitch
   if (pitchVal == 0 || pitchVal <= 1) {
-    Serial.print("sensor = ");
-    Serial.print(pitchVal);
     Serial.println("Note: C");
 
     lcd.setCursor(0, 0); //changes the place to print
     lcd.print("Note: C"); //prints on first line
   } else if (pitchVal > 1 && pitchVal <= 2) {
-    Serial.print("sensor = ");
-    Serial.print(pitchVal);
     Serial.println("Note: D");
 
     lcd.setCursor(0, 0); //changes the place to print
     lcd.print("Note: D"); //prints on first line
   } else if (pitchVal > 2 && pitchVal <= 3) {
-    Serial.print("sensor = ");
-    Serial.print(pitchVal);
     Serial.println("Note: E");
 
     lcd.setCursor(0, 0); //changes the place to print
     lcd.print("Note: E"); //prints on first line
   } else if (pitchVal > 3 && pitchVal <= 4) {
-    Serial.print("sensor = ");
-    Serial.print(pitchVal);
     Serial.println("Note: F");
 
     lcd.setCursor(0, 0); //changes the place to print
     lcd.print("Note: F"); //prints on first line
   } else if (pitchVal > 4 && pitchVal <= 5) {
-    Serial.print("sensor = ");
-    Serial.print(pitchVal);
     Serial.println("Note: G");
 
     lcd.setCursor(0, 0); //changes the place to print
     lcd.print("Note: G"); //prints on first line
   } else if (pitchVal > 5 && pitchVal <= 6) {
-    Serial.print("sensor = ");
-    Serial.print(pitchVal);
     Serial.println("Note: A");
 
     lcd.setCursor(0, 0); //changes the place to print
     lcd.print("Note: A"); //prints on first line
   } else if (pitchVal > 6 && pitchVal <= 7) {
-    Serial.print("sensor = ");
-    Serial.print(pitchVal);
     Serial.println("Note: B");
 
     lcd.setCursor(0, 0); //changes the place to print
@@ -134,25 +128,41 @@ void changePitch() {
 
 void changeVolume() {
   volumePoten = analogRead(volumeKnob); //reads the analogIn value
-  volumeVal = map(volumePoten, 0, 1023, 0, 100); //maps the ranges
+  volumeVal = map(volumePoten, 0, 1023, minVolume, maxVolume); //maps the ranges
 
   Serial.print("Volume: ");
   Serial.println(volumeVal);
+
+  if (volumeVal = volumeVal) {
+    lcd.setCursor(0, 1);
+    lcd.print("Volume: ");
+    lcd.println(volumeVal);
+  }
 }
 
 void changeOctave() {
   octavePoten = analogRead(octaveKnob); //reads the analogIn value
-  octaveVal = map(octavePoten, 0, 1023, 0, 3); //maps the ranges
+  octaveVal = map(octavePoten, 0, 1023, firstOctave, lastOctave); //maps the ranges
 
   Serial.print("Octave: ");
   Serial.println(octaveVal);
+
+  lcd.setCursor(8, 0);
+  lcd.print("Octave:");
+  lcd.println(octaveVal);
 }
 
 void ignitionButt() {
   int btn = digitalRead(button); //reads button input and puts it into variable btn
-  digitalWrite(buzzer, btn); //when the button is pressed, buzzer goes off
-  digitalWrite(led, btn); //when button is pressed, led turns on
-  delay(1);
+
+  if (volumeVal == 0) {
+    noTone(buzzer);
+  } else if (volumeVal > 0) {
+    digitalWrite(buzzer, btn); //when the button is pressed, buzzer goes off
+    digitalWrite(led, btn); //when button is pressed, led turns on
+    delay(1);
+  }
+
 }
 
 /*void firstDisplay() {
